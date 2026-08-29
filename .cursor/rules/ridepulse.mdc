@@ -1,0 +1,80 @@
+# RidePulse Development Rules
+
+## General
+
+* Always read PROJECT_SPEC.md before implementing a major feature.
+* PROJECT_SPEC.md is the source of truth.
+* Do not implement future phases unless explicitly requested.
+* Do not remove existing working functionality.
+* Do not modify unrelated files.
+* Do not create fake buttons or fake functionality.
+* Do not hardcode dynamic application data.
+* Prefer simple, maintainable solutions.
+
+## Frontend
+
+* Use React functional components.
+* Use Tailwind CSS for styling.
+* Do not use Bootstrap.
+* Use reusable components.
+* Use Zustand for global state where appropriate.
+* Use React Router for routing.
+* Use Axios for API communication.
+* Use React Leaflet for maps.
+* Use Recharts for analytics.
+* Use Lucide React for icons.
+* Keep UI responsive.
+* Support light and dark mode.
+
+## Backend
+
+* Use Express.js.
+* Use Mongoose for MongoDB.
+* Keep controllers, services, routes and models separated.
+* Use async/await.
+* Validate inputs.
+* Use centralized error handling.
+* Protect authenticated endpoints.
+* Enforce role-based authorization.
+* Never expose passwords or secrets.
+
+## Real-Time
+
+* Use Socket.IO for real-time shuttle updates.
+* Avoid unnecessary socket connections.
+* Keep simulation logic on the backend.
+* Broadcast shuttle updates efficiently.
+
+## Shuttle Simulation
+
+* Use mock campus coordinates.
+* Shuttles must move gradually between stops.
+* Do not teleport shuttle markers.
+* ETA must be calculated from current location and speed.
+* Crowd level must be derived from passenger count and capacity.
+
+## AI
+
+* Keep prediction logic modular.
+* Keep recommendation logic modular.
+* Do not claim a real ML model exists if using a rule-based or statistical implementation.
+* Prediction results must be derived from available data.
+
+## Testing
+
+After implementing a feature:
+
+1. Run the relevant application.
+2. Check for errors.
+3. Fix errors.
+4. Verify the feature.
+5. Report what was tested.
+
+## Code Quality
+
+* Use meaningful names.
+* Avoid unnecessary duplication.
+* Keep functions reasonably small.
+* Add comments only where useful.
+* Do not leave TODOs for required functionality.
+* Do not silently change architecture.
