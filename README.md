@@ -165,15 +165,6 @@ Open `http://localhost:5173`.
 
 Only one backend process can use port `5000`. If you see `EADDRINUSE`, stop the existing process before starting another one.
 
-## Demo Accounts
-
-| Role | Email | Password | Portal |
-| --- | --- | --- | --- |
-| Student | `student@ridepulse.demo` | `Student123!` | `/student/dashboard` |
-| Driver | `driver@ridepulse.demo` | `Driver123!` | `/driver/dashboard` |
-| Admin | `admin@ridepulse.demo` | `Admin123!` | `/admin/dashboard` |
-
-Public registration supports Student and Driver accounts. Admin accounts are seeded or managed administratively. A driver must have a Driver profile and shuttle assignment before operational controls can be used.
 
 ## Authentication and Authorization
 
