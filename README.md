@@ -1,170 +1,264 @@
-# 🚍 RidePulse – Real-Time Campus Transportation & Safety Intelligence System
+# RidePulse
 
-> **A production-ready, AI-enhanced, real-time campus shuttle tracking, communication, and safety management platform built for modern university ecosystems.**
+RidePulse is a full-stack smart campus shuttle platform for students, drivers, and transport administrators. It combines simulated real-time GPS tracking, route intelligence, crowd monitoring, safety communication, digital boarding passes, analytics, and fleet operations in one responsive application.
 
----
+The project is designed to run without physical GPS hardware or paid map APIs. Shuttle movement is simulated along seeded campus routes and broadcast through Socket.IO.
 
-## 🌟 Executive Summary
+## Product Capabilities
 
-**RidePulse** transforms university transit operations by connecting students, shuttle drivers, and administrators into an integrated real-time ecosystem. Featuring zero-teleportation live map simulation, dynamic ETA calculation, AI-driven crowd predictions, student SOS emergency reporting, automated breakdown detection, digital QR boarding passes, carbon savings tracking, and a professional multi-tenant administration suite.
+### Student portal
 
----
+- Student registration, login, logout, profile editing, and dark mode.
+- Responsive dashboard with OpenStreetMap campus map, shuttle markers, stop markers, route lines, route filtering, shuttle details, current stop, next stop, ETA, status, crowd level, capacity, and nearby stops.
+- Multiple shuttle tracking with live Socket.IO location and telemetry updates.
+- Route and stop browsing, nearest-stop lookup, journey planner, and smart shuttle recommendation.
+- Favorite routes and stops.
+- Service alerts, delay/breakdown notifications, unread counts, mark-read controls, and notification history.
+- Digital QR boarding pass generation and student ride history.
+- Emergency SOS reporting, shuttle issue reports, feedback, ratings, and sustainability statistics.
 
-## 🚀 Key Features by Phase
+### Driver console
 
-### 🛰️ Live Tracking & Simulation Engine
-- **OpenStreetMap & React Leaflet**: High-performance interactive campus map with custom status-coded shuttle markers.
-- **Gradual Motion Engine**: Backend simulation engine calculating interpolated geographic vectors between campus stops without teleportation.
-- **Socket.IO Event Stream**: Real-time broadcasts (`shuttle:location`, `shuttle:update`, `shuttle:status`, `shuttle:crowd`).
+- Driver login and administrator-controlled shuttle assignment.
+- Read-only view of the assigned shuttle, route, current stop, and next stop.
+- Start trip, end trip, mark stop reached, update passenger count, and update operational status.
+- Automatic crowd-level recalculation from passenger count and capacity.
+- Report delays, breakdowns, and emergencies to operations staff.
+- QR boarding-pass verification with automatic ride logging.
 
-### 🤖 Transportation Intelligence & AI Insights
-- **Dynamic ETA Engine**: Continuous ETA estimation computed from current coordinates, route segment distance, average speed, and delay factors.
-- **Crowd Density Classifier**:
-  - `0–40%`: **LOW** (Green)
-  - `41–75%`: **MEDIUM** (Amber)
-  - `76–100%`: **HIGH** (Red)
-- **Smart Trip Planner**: Point-to-point shuttle recommendation algorithm prioritizing lowest total travel time, ETA, and seat availability.
-- **Nearest Stop Calculator**: Haversine formula calculation finding closest campus stops and estimated walking time.
-- **AI Crowd Prediction Service**: Historical time-series regression model predicting route crowd density across peak academic hours.
+Drivers cannot claim or switch vehicles from the driver console. Assignment and unassignment are managed in **Admin > Drivers** so every shuttle has a controlled owner.
 
-### 🚨 Real-Time Communication & Safety System
-- **Broadcast Service Alerts**: Admin broadcast advisories (`INFO`, `WARNING`, `CRITICAL`) pushed instantly to connected client sessions.
-- **Student SOS Emergency Reporting**: Immediate reporting workflow categorized by urgency (`Medical Emergency`, `Accident`, `Unsafe Situation`, `Vehicle Problem`).
-- **Automated Breakdown Detector**: Automatic detection of stationary vehicles triggering immediate admin notifications and rerouting controls.
-- **Centralized Notification Center**: Drawer popover with badge counts, toast alerts, and read/unread status updates.
+### Admin operations
 
-### 💳 Student Convenience & Sustainability Suite
-- **Digital QR Boarding Pass**: Pass generator rendering dynamic QR code tickets verified by driver scanners (`/driver/scanner`).
-- **Automated Ride History**: Complete trip logging with timestamps, boarding stops, destination stops, and vehicle IDs.
-- **Carbon Offset Dashboard**: Documented CO₂ emission calculations ($170\text{g solo car} - 40\text{g shuttle} = 0.455\text{ kg CO}_2 \text{ saved / ride}$) with Recharts metrics and tree equivalent badges.
+- Dashboard metrics for fleet, students, rides, delays, crowd, alerts, emergencies, drivers, and routes.
+- Live fleet map and real-time shuttle monitoring.
+- Create, edit, delete, activate, disable, and resolve shuttle records.
+- Manage routes, ordered stops, schedules, vehicle capacity, drivers, and student accounts.
+- Assign or unassign shuttles from drivers. Assigned vehicles are protected from duplicate assignment.
+- Publish and remove service alerts and emergency announcements.
+- Review emergencies, breakdowns, feedback, and issue reports.
+- Database-backed analytics for daily rides, route usage, stop usage, hourly crowd, shuttle utilization, and carbon savings.
+- Trend-based crowd predictions and operational intelligence cards.
+- Start, pause, reset, delay, break down, recover, and simulate high-crowd fleet events.
+- Configure simulation speed, breakdown timeout, and crowd thresholds.
 
-### 📊 Professional Admin Fleet Control Suite
-- **13-Module Sidebar Navigation**: Dashboard, Live Map, Shuttles, Routes, Stops, Drivers, Students, Alerts, Emergencies, Breakdowns, Analytics, Predictions, Settings.
-- **Database-Driven Metrics**: 6 real-time metrics cards powered by MongoDB backend queries.
-- **Recharts Fleet Analytics**: Interactive multi-metric series filtering by `Today`, `7 Days`, `30 Days`, `Route`, and `Shuttle`.
+## Architecture
 
----
+```text
+React + Vite frontend
+        |
+        | Axios REST API + authenticated Socket.IO
+        v
+Express backend + JWT middleware
+        |
+        +-- Mongoose models and MongoDB
+        +-- Shuttle simulation engine
+        +-- Prediction and recommendation services
+        +-- Role-based controllers and routes
+```
 
-## 🏗️ Tech Stack
-
-| Domain | Technologies |
-| :--- | :--- |
-| **Frontend Framework** | React 18, Vite, React Router DOM v6, Zustand (State Management) |
-| **Styling & UI** | Tailwind CSS v4, Lucide React Icons, Recharts Analytics |
-| **Mapping** | Leaflet, React Leaflet, OpenStreetMap Tile Layer |
-| **Backend Framework** | Node.js, Express.js |
-| **Real-Time Layer** | Socket.IO WebSockets |
-| **Database & ORM** | MongoDB, Mongoose ODM |
-| **Authentication** | JSON Web Tokens (JWT), Bcrypt.js Password Hashing |
-
----
-
-## 📁 Repository Directory Structure
+The application uses a modular client/server structure:
 
 ```text
 RidePulse/
 ├── backend/
-│   ├── config/             # DB & Environment Configuration
-│   ├── controllers/        # Express Route Controllers (16 controllers)
-│   ├── middleware/         # Auth, Role Authorization, Error Handler, Not Found
-│   ├── models/             # Mongoose Schemas (User, Shuttle, Route, Stop, Alert, EmergencyReport, QRPass, Ride, Driver, Notification)
-│   ├── routes/             # REST Express Routers
-│   ├── seed/               # Demo Database Seeder Scripts
-│   ├── simulation/         # Geolocation Interpolation Simulation Engine
-│   ├── sockets/            # Socket.IO Gateway & Event Handlers
-│   ├── utils/              # ApiResponse & Geolocation Utilities
-│   └── server.js           # Server Entry Point (Port 5000)
+│   ├── config/         MongoDB and environment configuration
+│   ├── controllers/    Request handlers and business workflows
+│   ├── middleware/     JWT auth, roles, errors, and not-found handling
+│   ├── models/         Mongoose schemas and relationships
+│   ├── routes/         REST endpoint definitions
+│   ├── seed/           Demo users and campus data
+│   ├── services/       Predictions and domain services
+│   ├── simulation/     Simulated shuttle movement
+│   ├── sockets/        Authenticated Socket.IO gateway
+│   └── server.js       API and WebSocket entry point
 └── frontend/
-    ├── public/             # Static Assets
-    ├── src/
-    │   ├── components/     # Modals, Banners, Maps, Charts, Skeletons
-    │   ├── layouts/        # Student, Driver, Admin & Auth Responsive Layouts
-    │   ├── pages/          # 18 Modular Portal Pages
-    │   ├── routes/         # AppRouter & Protected Role-Based Guards
-    │   ├── services/       # Axios API Clients
-    │   └── store/          # Zustand Auth, Theme & Socket Stores
-    ├── index.html
-    └── vite.config.js
+    ├── src/components/ Reusable maps, charts, alerts, safety, and UI controls
+    ├── src/layouts/    Student, driver, admin, and auth layouts
+    ├── src/pages/      Public and role-specific screens
+    ├── src/routes/     Protected role-based routing
+    ├── src/services/   Axios service clients
+    ├── src/store/      Auth, theme, and live socket state
+    └── vite.config.js  Development server and API/WebSocket proxy
 ```
 
----
+## Technology Stack
 
-## ⚙️ Installation & Setup Instructions
+### Frontend
+
+- React 19 and Vite
+- React Router
+- Tailwind CSS
+- Axios
+- Zustand
+- React Hook Form
+- Recharts
+- Leaflet and React Leaflet with OpenStreetMap
+- Socket.IO Client
+- Lucide React
+- Framer Motion
+- `qrcode.react`
+
+### Backend
+
+- Node.js 18+
+- Express 5
+- MongoDB and Mongoose
+- JWT authentication
+- bcryptjs password hashing
+- Socket.IO
+- CORS and dotenv
+
+## Local Setup
 
 ### Prerequisites
-- **Node.js**: v18.0.0 or higher
-- **MongoDB**: Local instance running on `mongodb://localhost:27017` or MongoDB Atlas URI
 
-### 1. Clone & Setup Environment
+- Node.js 18 or newer
+- MongoDB running locally or a MongoDB Atlas connection string
+
+### Clone and configure
+
 ```bash
 git clone https://github.com/vsanvika/RidePulse.git
 cd RidePulse
 ```
 
-Create `.env` file in root directory:
+Copy `.env.example` to `.env` at the repository root and configure:
+
 ```env
 PORT=5000
-MONGO_URI=mongodb://localhost:27017/ridepulse
-JWT_SECRET=ridepulse_secret_key_2026
+MONGO_URI=mongodb://127.0.0.1:27017/ridepulse
+JWT_SECRET=replace-with-a-long-random-secret
 CLIENT_URL=http://localhost:5173
 ```
 
-### 2. Backend Installation & Database Seeding
+The backend also accepts environment files from the backend directory. Never commit real secrets.
+
+### Install dependencies
+
 ```bash
 cd backend
 npm install
-node server.js
-```
-*Note: The server will automatically connect to MongoDB, run seed scripts for campus stops, routes, shuttles, demo users, and start the shuttle simulation engine.*
-
-### 3. Frontend Installation & Running
-```bash
 cd ../frontend
 npm install
+```
+
+### Run the backend
+
+```bash
+cd backend
 npm run dev
 ```
-Open your browser at `http://localhost:5173`.
 
----
+The API listens on `http://localhost:5000`. On startup it connects to MongoDB, seeds demo users and campus data when needed, initializes Socket.IO, and starts the shuttle simulation.
 
-## 🔑 Pre-Configured Demo Accounts
+### Run the frontend
 
-| Role | Email | Password | Access Rights |
-| :--- | :--- | :--- | :--- |
-| **Student** | `student@ridepulse.demo` | `Student123!` | Live Tracking, Trip Planner, SOS, Boarding Pass, Ride History, CO₂ Offset |
-| **Driver** | `driver@ridepulse.demo` | `Driver123!` | Telemetry Console, Pass Verification QR Scanner |
-| **Admin** | `admin@ridepulse.demo` | `Admin123!` | Complete Fleet Control, Emergency Triage, Service Alerts Broadcast, Recharts Analytics |
+In a second terminal:
 
----
+```bash
+cd frontend
+npm run dev
+```
 
-## 📡 REST API & Socket.IO Specification
+Open `http://localhost:5173`.
 
-### Core REST Endpoints
-- `POST /api/auth/login` - Authenticate user & return JWT token.
-- `POST /api/auth/register` - Register new student account.
-- `GET /api/shuttles` - List active campus shuttles with live coordinates & telemetry.
-- `GET /api/intelligence/recommendations` - Get smart shuttle recommendations based on Origin and Destination.
-- `GET /api/predictions/crowd/:routeId` - Get ML crowd predictions for route.
-- `POST /api/emergencies` - Student emergency SOS report submission.
-- `POST /api/alerts` - Admin service alert publication.
-- `POST /api/passes/generate` - Generate student digital QR boarding pass.
-- `POST /api/passes/verify` - Driver scanner verification endpoint.
-- `GET /api/sustainability/stats` - CO₂ carbon savings & trees planted calculation.
-- `GET /api/admin/metrics` - Database-driven fleet dashboard metrics.
+Only one backend process can use port `5000`. If you see `EADDRINUSE`, stop the existing process before starting another one.
 
-### Socket.IO Events
-- `shuttle:location` - Pushes updated latitude, longitude, and bearing.
-- `shuttle:update` - Pushes updated speed, crowd level, occupancy, and status.
-- `alert:new` - Real-time broadcast of published service advisories.
-- `emergency:new` - Instant dispatch of student emergency SOS to admin console.
-- `notification:new` - Real-time push notification to user drawer.
+## Demo Accounts
 
----
+| Role | Email | Password | Portal |
+| --- | --- | --- | --- |
+| Student | `student@ridepulse.demo` | `Student123!` | `/student/dashboard` |
+| Driver | `driver@ridepulse.demo` | `Driver123!` | `/driver/dashboard` |
+| Admin | `admin@ridepulse.demo` | `Admin123!` | `/admin/dashboard` |
 
-## 🏆 Hackathon Presentation Checklist
+Public registration supports Student and Driver accounts. Admin accounts are seeded or managed administratively. A driver must have a Driver profile and shuttle assignment before operational controls can be used.
 
-- ✅ **Live Map Tracking**: Shuttles move smoothly on OpenStreetMap between stops without teleportation.
-- ✅ **Real-Time SOS**: Student clicks SOS -> Instant alert appears on Admin Emergency Console.
-- ✅ **QR Pass & Scan**: Student generates pass -> Driver verifies via `/driver/scanner` -> Ride auto-logged to database.
-- ✅ **Breakdown Resolution**: Admin resolves flagged breakdown -> Vehicle resumes on-time status.
-- ✅ **Full Dark Mode**: Seamless toggle between dark and light themes across every dashboard module.
+## Authentication and Authorization
+
+- Passwords are hashed with bcryptjs.
+- Login returns a JWT used by Axios and Socket.IO.
+- API responses use `{ success, message, data }` on success and `{ success, message }` on errors.
+- `STUDENT`, `DRIVER`, and `ADMIN` roles are enforced by backend middleware and frontend route guards.
+- Public registration cannot create administrator accounts.
+- Driver telemetry can only update the driver’s assigned shuttle.
+- Admin shuttle assignment keeps `Driver.assignedShuttle` and `Shuttle.driver` synchronized.
+
+## Simulation and Real-Time Data
+
+The simulator is the source of live shuttle movement. It interpolates positions along ordered seeded stops, detects stops, updates current and next stops, changes passenger counts at stops, calculates crowd bands, and persists snapshots to MongoDB.
+
+Supported simulation actions:
+
+- Start, pause, and reset simulation.
+- Simulate delay, breakdown, high crowd, and recovery.
+- Configure speed multiplier, breakdown timeout, and crowd thresholds.
+
+Crowd levels use occupancy percentage:
+
+- `LOW`: 0-40%
+- `MEDIUM`: 41-75%
+- `HIGH`: 76-100%
+
+The prediction service is trend-based and uses available operational history. It is not presented as a trained machine-learning model.
+
+Socket.IO authenticates with the JWT handshake token and uses these rooms:
+
+- `fleet`: authenticated students, drivers, and admins.
+- `user:{userId}`: personal notifications.
+- `admin`: emergencies, breakdowns, feedback, and operations events.
+
+Important events include `shuttle:location`, `shuttle:update`, `shuttle:status`, `shuttle:crowd`, `simulation:status`, `alert:new`, `notification:new`, `emergency:new`, `emergency:update`, `breakdown:new`, and `feedback:new`.
+
+## REST API Areas
+
+All endpoints are under `/api`.
+
+| Area | Examples |
+| --- | --- |
+| Health | `GET /api/health` |
+| Auth | `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/auth/me`, `PUT /api/auth/profile`, `POST /api/auth/favorites` |
+| Campus | `/api/stops`, `/api/routes`, `/api/shuttles` |
+| Driver | `/api/drivers/me/shuttle`, `/api/drivers/me/trip/start`, `/api/drivers/me/trip/end`, `/api/drivers/me/report`, `/api/drivers/me/stop/reached` |
+| Intelligence | `/api/intelligence/nearest-stops`, `/api/intelligence/plan-trip`, `/api/intelligence/eta` |
+| Simulation | `/api/simulation/status`, `/api/simulation/start`, `/api/simulation/pause`, `/api/simulation/reset`, `/api/simulation/event` |
+| Alerts | `GET /api/alerts`, admin `POST /api/alerts`, admin `DELETE /api/alerts/:id` |
+| Notifications | `/api/notifications` |
+| Safety | `/api/emergencies`, `/api/feedback` |
+| Boarding | `/api/passes/generate`, `/api/passes/verify` |
+| Rides | `/api/rides/history`, `POST /api/rides` |
+| Predictions | `/api/predictions/crowd/:routeId`, `/api/predictions/insights` |
+| Analytics | `/api/admin/metrics`, `/api/admin/analytics` |
+| Settings | `GET/PUT /api/settings` |
+
+## Ride and Boarding Flow
+
+1. A student generates an active QR boarding pass for a route.
+2. The driver verifies the pass from the QR Scanner console.
+3. The backend validates the date and active status, marks the pass `USED`, and logs the ride with shuttle, route, boarding stop, destination stop, and completion timestamp.
+4. The student can view the ride in Ride History.
+
+## Validation and Verification
+
+```bash
+cd frontend
+npm run build
+
+cd ../backend
+node --check server.js
+```
+
+The frontend build may report a non-blocking bundle-size warning from the current dependency graph.
+
+## Security Notes
+
+- Replace the demo JWT secret before deployment.
+- Keep `.env` files out of Git.
+- Use HTTPS and a restricted `CLIENT_URL` in production.
+- Use a managed MongoDB user with least-privilege access.
+- Rotate demo credentials before exposing the application publicly.
+
+## License
+
+This project is provided for educational, hackathon, and demonstration use.
