@@ -39,10 +39,15 @@ async function start() {
   app.use((req, res, next) => {
     const origin = req.headers.origin;
     const allowedOrigins = new Set(config.allowedOrigins);
+    const normalizedOrigin = origin?.replace(/\/$/, "");
+    const originAllowed =
+      config.allowAllOrigins || !origin || allowedOrigins.has(normalizedOrigin);
 
-    if (!origin || allowedOrigins.has(origin.replace(/\/$/, ""))) {
+    if (originAllowed) {
       res.header("Access-Control-Allow-Origin", origin || "*");
-      res.header("Access-Control-Allow-Credentials", "true");
+      if (!config.allowAllOrigins) {
+        res.header("Access-Control-Allow-Credentials", "true");
+      }
       res.header(
         "Access-Control-Allow-Headers",
         "Origin, X-Requested-With, Content-Type, Accept, Authorization"

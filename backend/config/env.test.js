@@ -13,6 +13,7 @@ test("loadEnv resolves production values and parseAllowedOrigins handles comma-s
 
   assert.equal(config.port, 5001);
   assert.equal(config.jwtSecret, "production-secret");
+  assert.equal(config.allowAllOrigins, false);
   assert.deepEqual(parseAllowedOrigins(process.env.CLIENT_URL), [
     "https://app.example.com",
     "https://admin.example.com",

@@ -2,10 +2,10 @@ const { Server } = require("socket.io");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-function initSockets(httpServer, { clientUrl }) {
+function initSockets(httpServer, { clientUrl, allowAllOrigins }) {
   const io = new Server(httpServer, {
     cors: {
-      origin: clientUrl,
+      origin: allowAllOrigins ? true : clientUrl,
       methods: ["GET", "POST"],
     },
   });

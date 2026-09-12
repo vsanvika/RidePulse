@@ -14,6 +14,7 @@ function parseAllowedOrigins(rawOrigins = "") {
 }
 
 function loadEnv() {
+  const nodeEnv = process.env.NODE_ENV || "development";
   const mongoUri = process.env.MONGO_URI || process.env.MONGODB_URI;
   const jwtSecret = process.env.JWT_SECRET;
 
@@ -33,6 +34,9 @@ function loadEnv() {
     process.env.CLIENT_URL ||
     process.env.FRONTEND_URL ||
     "http://localhost:5173";
+  const allowAllOrigins =
+    process.env.CORS_ALLOW_ALL === "true" ||
+    (nodeEnv === "production" && process.env.CORS_ALLOW_ALL !== "false");
 
   return {
     port: Number(process.env.PORT) || 5000,
@@ -40,7 +44,8 @@ function loadEnv() {
     jwtSecret,
     clientUrl,
     allowedOrigins: parseAllowedOrigins(clientUrl),
-    nodeEnv: process.env.NODE_ENV || "development",
+    nodeEnv,
+    allowAllOrigins,
   };
 }
 
