@@ -85,11 +85,13 @@ frontend/
 
 Before starting the frontend, make sure the backend is running.
 
-The frontend expects the backend to be available at:
+During development, the frontend expects the backend to be available at:
 
 - `http://localhost:5000`
 
-The Vite config proxies `/api` and `/socket.io` to that server.
+The Vite config proxies `/api` and `/socket.io` to that server. Production builds
+use `https://ridepulse-703c.onrender.com` by default and can override it with
+`VITE_API_URL` and `VITE_SOCKET_URL` environment variables.
 
 ## Installation
 
@@ -170,7 +172,7 @@ The frontend centralizes API requests in `src/services/api.js` and data-access h
 
 ### HTTP client behavior
 
-- Base URL is `/api`
+- Base URL is `/api` in development and the deployed Render backend in production
 - Authorization header is attached from local storage when a token is present
 - If a request gets a `401`, the app clears the stored token for non-auth endpoints
 

@@ -1,6 +1,8 @@
 import { io } from "socket.io-client";
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || undefined;
+const SOCKET_URL =
+  import.meta.env.VITE_SOCKET_URL ||
+  (import.meta.env.PROD ? "https://ridepulse-703c.onrender.com" : undefined);
 
 class SocketService {
   socket = null;
