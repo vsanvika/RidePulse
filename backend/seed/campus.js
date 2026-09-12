@@ -232,18 +232,16 @@ async function seedCampusData() {
     const mockAlerts = [
       {
         title: "Hostel Shuttle Delay",
-        message: "Hostel Express (R03) running 10 minutes delayed due to heavy rain around South Hostels.",
-        type: "DELAY",
-        severity: "MEDIUM",
+        description: "Hostel Express (R03) running 10 minutes delayed due to heavy rain around South Hostels.",
+        severity: "WARNING",
         route: routeDocs.R03._id,
         shuttle: shuttleDocs.S03._id,
         active: true,
       },
       {
         title: "Road Construction Alert",
-        message: "Perimeter Ring route temporarily bypassing International Guest House stop due to maintenance.",
-        type: "SERVICE_CHANGE",
-        severity: "LOW",
+        description: "Perimeter Ring route temporarily bypassing International Guest House stop due to maintenance.",
+        severity: "INFO",
         route: routeDocs.R05._id,
         active: true,
       },
