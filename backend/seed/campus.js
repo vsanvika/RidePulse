@@ -7,22 +7,22 @@ const Ride = require("../models/Ride");
 const Alert = require("../models/Alert");
 
 const mockStops = [
-  { stopId: "ST01", name: "Main Campus Gate", code: "MCG", location: { latitude: 17.4450, longitude: 78.3470 }, facilities: ["Shelter", "Digital Board", "CCTV"] },
-  { stopId: "ST02", name: "Administration Building", code: "ADM", location: { latitude: 17.4462, longitude: 78.3485 }, facilities: ["Shelter", "Benches"] },
-  { stopId: "ST03", name: "Engineering Complex", code: "ENG", location: { latitude: 17.4475, longitude: 78.3498 }, facilities: ["Shelter", "Digital Board", "Vending"] },
-  { stopId: "ST04", name: "Central Library", code: "LIB", location: { latitude: 17.4468, longitude: 78.3512 }, facilities: ["Shelter", "Benches", "Wi-Fi"] },
-  { stopId: "ST05", name: "Science & Tech Block", code: "STB", location: { latitude: 17.4482, longitude: 78.3525 }, facilities: ["Shelter", "Digital Board"] },
-  { stopId: "ST06", name: "Student Activity Center", code: "SAC", location: { latitude: 17.4458, longitude: 78.3530 }, facilities: ["Shelter", "Food Kiosk", "Wi-Fi"] },
-  { stopId: "ST07", name: "North Campus Hostels", code: "NCH", location: { latitude: 17.4495, longitude: 78.3505 }, facilities: ["Shelter", "Digital Board"] },
-  { stopId: "ST08", name: "South Campus Hostels", code: "SCH", location: { latitude: 17.4435, longitude: 78.3480 }, facilities: ["Shelter", "Benches"] },
-  { stopId: "ST09", name: "Sports & Athletics Complex", code: "SAC", location: { latitude: 17.4442, longitude: 78.3515 }, facilities: ["Shelter", "Water Dispenser"] },
-  { stopId: "ST10", name: "Campus Food Court", code: "CFC", location: { latitude: 17.4460, longitude: 78.3500 }, facilities: ["Shelter", "Digital Board", "Benches"] },
-  { stopId: "ST11", name: "Research & Innovation Park", code: "RIP", location: { latitude: 17.4502, longitude: 78.3538 }, facilities: ["Shelter", "Digital Board"] },
-  { stopId: "ST12", name: "Grand Auditorium", code: "AUD", location: { latitude: 17.4452, longitude: 78.3490 }, facilities: ["Shelter"] },
-  { stopId: "ST13", name: "University Health Center", code: "UHC", location: { latitude: 17.4438, longitude: 78.3495 }, facilities: ["Shelter", "Emergency Telephone"] },
-  { stopId: "ST14", name: "Central Transport Terminal", code: "CTT", location: { latitude: 17.4448, longitude: 78.3465 }, facilities: ["Shelter", "Ticketing Kiosk", "Digital Board"] },
-  { stopId: "ST15", name: "International Guest House", code: "IGH", location: { latitude: 17.4488, longitude: 78.3478 }, facilities: ["Shelter"] },
-  { stopId: "ST16", name: "Bio-Technology Wing", code: "BTW", location: { latitude: 17.4490, longitude: 78.3520 }, facilities: ["Shelter"] },
+  { stopId: "ST01", name: "Main Campus Gate", code: "MCG", location: { latitude: 17.4130852, longitude: 78.6624997 }, facilities: ["Shelter", "Digital Board", "CCTV"] },
+  { stopId: "ST02", name: "Administration Building", code: "ADM", location: { latitude: 17.4142852, longitude: 78.6639997 }, facilities: ["Shelter", "Benches"] },
+  { stopId: "ST03", name: "Engineering Complex", code: "ENG", location: { latitude: 17.4155852, longitude: 78.6652997 }, facilities: ["Shelter", "Digital Board", "Vending"] },
+  { stopId: "ST04", name: "Central Library", code: "LIB", location: { latitude: 17.4148852, longitude: 78.6666997 }, facilities: ["Shelter", "Benches", "Wi-Fi"] },
+  { stopId: "ST05", name: "Science & Tech Block", code: "STB", location: { latitude: 17.4163852, longitude: 78.6679997 }, facilities: ["Shelter", "Digital Board"] },
+  { stopId: "ST06", name: "Student Activity Center", code: "SAC", location: { latitude: 17.4138852, longitude: 78.6684997 }, facilities: ["Shelter", "Food Kiosk", "Wi-Fi"] },
+  { stopId: "ST07", name: "North Campus Hostels", code: "NCH", location: { latitude: 17.4180852, longitude: 78.6659997 }, facilities: ["Shelter", "Digital Board"] },
+  { stopId: "ST08", name: "South Campus Hostels", code: "SCH", location: { latitude: 17.4115852, longitude: 78.6634997 }, facilities: ["Shelter", "Benches"] },
+  { stopId: "ST09", name: "Sports & Athletics Complex", code: "SAC", location: { latitude: 17.4122852, longitude: 78.6669997 }, facilities: ["Shelter", "Water Dispenser"] },
+  { stopId: "ST10", name: "Campus Food Court", code: "CFC", location: { latitude: 17.4140852, longitude: 78.6654997 }, facilities: ["Shelter", "Digital Board", "Benches"] },
+  { stopId: "ST11", name: "Research & Innovation Park", code: "RIP", location: { latitude: 17.4181852, longitude: 78.6692997 }, facilities: ["Shelter", "Digital Board"] },
+  { stopId: "ST12", name: "Grand Auditorium", code: "AUD", location: { latitude: 17.4136852, longitude: 78.6644997 }, facilities: ["Shelter"] },
+  { stopId: "ST13", name: "University Health Center", code: "UHC", location: { latitude: 17.4118852, longitude: 78.6649997 }, facilities: ["Shelter", "Emergency Telephone"] },
+  { stopId: "ST14", name: "Central Transport Terminal", code: "CTT", location: { latitude: 17.4130852, longitude: 78.6619997 }, facilities: ["Shelter", "Ticketing Kiosk", "Digital Board"] },
+  { stopId: "ST15", name: "International Guest House", code: "IGH", location: { latitude: 17.4172852, longitude: 78.6632997 }, facilities: ["Shelter"] },
+  { stopId: "ST16", name: "Bio-Technology Wing", code: "BTW", location: { latitude: 17.4170852, longitude: 78.6674997 }, facilities: ["Shelter"] },
 ];
 
 async function seedCampusData() {
@@ -33,6 +33,9 @@ async function seedCampusData() {
       let stop = await Stop.findOne({ stopId: stopData.stopId });
       if (!stop) {
         stop = await Stop.create(stopData);
+      } else {
+        stop.location = stopData.location;
+        await stop.save();
       }
       stopDocs[stopData.stopId] = stop;
     }
@@ -130,7 +133,7 @@ async function seedCampusData() {
         capacity: 40,
         route: routeDocs.R01._id,
         driver: driverDocs[0]?._id || null,
-        currentLocation: { latitude: 17.4455, longitude: 78.3482 },
+        currentLocation: { latitude: 17.4135852, longitude: 78.6636997 },
         currentStop: stopDocs.ST01._id,
         nextStop: stopDocs.ST02._id,
         speed: 24,
@@ -144,7 +147,7 @@ async function seedCampusData() {
         capacity: 45,
         route: routeDocs.R02._id,
         driver: driverDocs[1]?._id || null,
-        currentLocation: { latitude: 17.4478, longitude: 78.3501 },
+        currentLocation: { latitude: 17.4158852, longitude: 78.6655997 },
         currentStop: stopDocs.ST03._id,
         nextStop: stopDocs.ST05._id,
         speed: 28,
@@ -158,7 +161,7 @@ async function seedCampusData() {
         capacity: 40,
         route: routeDocs.R03._id,
         driver: driverDocs[2]?._id || null,
-        currentLocation: { latitude: 17.4438, longitude: 78.3482 },
+        currentLocation: { latitude: 17.4118852, longitude: 78.6636997 },
         currentStop: stopDocs.ST08._id,
         nextStop: stopDocs.ST13._id,
         speed: 12,
@@ -172,7 +175,7 @@ async function seedCampusData() {
         capacity: 50,
         route: routeDocs.R04._id,
         driver: driverDocs[3]?._id || null,
-        currentLocation: { latitude: 17.4500, longitude: 78.3532 },
+        currentLocation: { latitude: 17.4180852, longitude: 78.6686997 },
         currentStop: stopDocs.ST11._id,
         nextStop: stopDocs.ST15._id,
         speed: 32,
@@ -186,7 +189,7 @@ async function seedCampusData() {
         capacity: 40,
         route: routeDocs.R05._id,
         driver: null,
-        currentLocation: { latitude: 17.4442, longitude: 78.3515 },
+        currentLocation: { latitude: 17.4122852, longitude: 78.6669997 },
         currentStop: stopDocs.ST09._id,
         nextStop: stopDocs.ST06._id,
         speed: 0,
@@ -200,7 +203,7 @@ async function seedCampusData() {
         capacity: 35,
         route: routeDocs.R01._id,
         driver: null,
-        currentLocation: { latitude: 17.4448, longitude: 78.3465 },
+        currentLocation: { latitude: 17.4130852, longitude: 78.6619997 },
         currentStop: stopDocs.ST14._id,
         nextStop: stopDocs.ST01._id,
         speed: 0,
@@ -215,6 +218,11 @@ async function seedCampusData() {
       let shuttle = await Shuttle.findOne({ shuttleId: shuttleData.shuttleId });
       if (!shuttle) {
         shuttle = await Shuttle.create(shuttleData);
+      } else {
+        shuttle.currentLocation = shuttleData.currentLocation;
+        shuttle.currentStop = shuttleData.currentStop;
+        shuttle.nextStop = shuttleData.nextStop;
+        await shuttle.save();
       }
       shuttleDocs[shuttleData.shuttleId] = shuttle;
     }

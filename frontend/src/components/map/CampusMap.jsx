@@ -3,8 +3,8 @@ import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from "react-
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-// Center of campus (Hyderabad University mock coordinates)
-const CAMPUS_CENTER = [17.4465, 78.3500];
+// Venkatapur village, Ghatkesar, Medchal-Malkajgiri, Telangana
+const CAMPUS_CENTER = [17.4145852, 78.6654997];
 
 // Custom HTML DivIcon for Shuttle Markers with dynamic pulse & status styling
 function createShuttleIcon(shuttle) {
@@ -89,7 +89,7 @@ function MapRecenter({ center }) {
 }
 
 export default function CampusMap({ shuttles = [], stops = [], routes = [], selectedShuttle = null, onSelectShuttle }) {
-  const [userLocation] = useState([17.4458, 78.3530]); // Mock student location at Student Activity Center
+  const [userLocation] = useState(CAMPUS_CENTER);
 
   return (
     <div className="relative h-[550px] w-full overflow-hidden rounded-2xl border border-slate-200 shadow-md dark:border-slate-800">
@@ -166,7 +166,7 @@ export default function CampusMap({ shuttles = [], stops = [], routes = [], sele
         <Marker position={userLocation} icon={userLocationIcon}>
           <Popup>
             <div className="p-1 text-xs font-semibold text-slate-800">
-              📍 Your Location (Student Activity Center)
+              📍 Your Location (Venkatapur village)
             </div>
           </Popup>
         </Marker>

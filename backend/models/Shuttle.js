@@ -32,11 +32,11 @@ const shuttleSchema = new mongoose.Schema(
     currentLocation: {
       latitude: {
         type: Number,
-        default: 17.4455,
+        default: 17.4135852,
       },
       longitude: {
         type: Number,
-        default: 78.3482,
+        default: 78.6636997,
       },
     },
     currentStop: {

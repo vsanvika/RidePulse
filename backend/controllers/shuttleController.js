@@ -70,7 +70,7 @@ async function createShuttle(req, res, next) {
       capacity: Number(capacity) || 40,
       route: route || null,
       driver: driver || null,
-      currentLocation: currentLocation || { latitude: 17.4455, longitude: 78.3482 },
+      currentLocation: currentLocation || { latitude: 17.4135852, longitude: 78.6636997 },
       currentStop: currentStop || null,
       nextStop: nextStop || null,
       speed: Number(speed) || 0,

@@ -20,6 +20,11 @@ export const useAuthStore = create((set, get) => ({
   clearError: () => set({ error: null }),
   clearToast: () => set({ toastMessage: null }),
 
+  updateFavorites: (type, favorites) => {
+    const field = type === "route" ? "favoriteRoutes" : type === "stop" ? "favoriteStops" : "favoriteShuttles";
+    set((state) => ({ user: state.user ? { ...state.user, [field]: favorites } : state.user }));
+  },
+
   setToast: (msg) => {
     set({ toastMessage: msg });
     setTimeout(() => {

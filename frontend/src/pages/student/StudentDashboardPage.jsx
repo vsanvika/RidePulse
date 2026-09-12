@@ -34,7 +34,7 @@ export default function StudentDashboardPage() {
           shuttlesApi.getAll(),
           routesApi.getAll(),
           stopsApi.getAll(),
-          intelligenceApi.getNearestStops(17.4458, 78.3530).catch(() => null),
+          intelligenceApi.getNearestStops(17.4145852, 78.6654997).catch(() => null),
         ]);
 
         if (resShuttles?.success) setInitialShuttles(resShuttles.data.shuttles);

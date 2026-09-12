@@ -35,7 +35,7 @@ export default function EmergencyModal({ shuttles = [] }) {
         category,
         description,
         shuttleId: shuttleId || "N/A",
-        location: { latitude: 17.4458, longitude: 78.3530, landmark },
+        location: { latitude: 17.4145852, longitude: 78.6654997, landmark },
       });
 
       if (res.success) {

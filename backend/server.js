@@ -1,3 +1,4 @@
+const path = require("path");
 const http = require("http");
 const express = require("express");
 const cors = require("cors");
@@ -35,12 +36,26 @@ async function start() {
   const config = loadEnv();
   const app = express();
 
-  app.use(
-    cors({
-      origin: config.clientUrl,
-      credentials: true,
-    })
-  );
+  app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    const allowedOrigins = new Set(config.allowedOrigins);
+
+    if (!origin || allowedOrigins.has(origin.replace(/\/$/, ""))) {
+      res.header("Access-Control-Allow-Origin", origin || "*");
+      res.header("Access-Control-Allow-Credentials", "true");
+      res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+      );
+      res.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
+    }
+
+    if (req.method === "OPTIONS") {
+      return res.sendStatus(204);
+    }
+
+    next();
+  });
   app.use(express.json());
 
   // Mount API Endpoints
@@ -62,6 +77,15 @@ async function start() {
   app.use("/api/admin", adminRoutes);
   app.use("/api/feedback", feedbackRoutes);
   app.use("/api/settings", settingsRoutes);
+
+  if (config.nodeEnv === "production") {
+    const frontendDist = path.join(__dirname, "../frontend/dist");
+    app.use(express.static(frontendDist));
+    app.get(/^(?!\/api).*$/, (req, res, next) => {
+      if (req.path.startsWith("/api")) return next();
+      res.sendFile(path.join(frontendDist, "index.html"));
+    });
+  }
 
   app.use(notFound);
   app.use(errorHandler);

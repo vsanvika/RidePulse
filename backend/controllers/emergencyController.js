@@ -15,7 +15,7 @@ async function createEmergencyReport(req, res, next) {
       category: category || "Other",
       description,
       shuttleId: shuttleId || "N/A",
-      location: location || { latitude: 17.4458, longitude: 78.3530, landmark: "SAC" },
+      location: location || { latitude: 17.4145852, longitude: 78.6654997, landmark: "Venkatapur village" },
       status: "PENDING",
     });
 

@@ -12,8 +12,8 @@ export default function StopsPage() {
     stopId: "",
     name: "",
     code: "",
-    latitude: 17.4450,
-    longitude: 78.3470,
+    latitude: 17.4130852,
+    longitude: 78.6624997,
     facilities: "Shelter, Digital Board",
   });
 
@@ -43,8 +43,8 @@ export default function StopsPage() {
       stopId: `ST${String(stops.length + 1).padStart(2, "0")}`,
       name: "",
       code: "",
-      latitude: 17.4450,
-      longitude: 78.3470,
+      latitude: 17.4130852,
+      longitude: 78.6624997,
       facilities: "Shelter, Digital Board",
     });
     setShowForm(true);
@@ -56,8 +56,8 @@ export default function StopsPage() {
       stopId: stop.stopId,
       name: stop.name,
       code: stop.code,
-      latitude: stop.location?.latitude || 17.4450,
-      longitude: stop.location?.longitude || 78.3470,
+      latitude: stop.location?.latitude || 17.4130852,
+      longitude: stop.location?.longitude || 78.6624997,
       facilities: Array.isArray(stop.facilities) ? stop.facilities.join(", ") : "",
     });
     setShowForm(true);

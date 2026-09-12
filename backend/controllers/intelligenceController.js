@@ -12,8 +12,8 @@ const { sendSuccess, sendError } = require("../utils/apiResponse");
 
 async function getNearestStops(req, res, next) {
   try {
-    const latitude = parseFloat(req.query.lat) || 17.4458; // default SAC mock lat
-    const longitude = parseFloat(req.query.lng) || 78.3530; // default SAC mock lng
+    const latitude = parseFloat(req.query.lat) || 17.4145852;
+    const longitude = parseFloat(req.query.lng) || 78.6654997;
 
     const userLoc = { latitude, longitude };
     const stops = await Stop.find({ active: true });

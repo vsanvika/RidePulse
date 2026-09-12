@@ -58,6 +58,12 @@ const userSchema = new mongoose.Schema(
         ref: "Stop",
       },
     ],
+    favoriteShuttles: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Shuttle",
+      },
+    ],
     isActive: {
       type: Boolean,
       default: true,

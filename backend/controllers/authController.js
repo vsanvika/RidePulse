@@ -139,8 +139,8 @@ async function updateProfile(req, res, next) {
 async function toggleFavorite(req, res, next) {
   try {
     const { type, id } = req.body;
-    if (!id || !["route", "stop"].includes(type)) return sendError(res, "Favorite type and id are required", 400);
-    const field = type === "route" ? "favoriteRoutes" : "favoriteStops";
+    if (!id || !["route", "stop", "shuttle"].includes(type)) return sendError(res, "Favorite type and id are required", 400);
+    const field = type === "route" ? "favoriteRoutes" : type === "stop" ? "favoriteStops" : "favoriteShuttles";
     const values = req.user[field].map(String);
     const index = values.indexOf(String(id));
     if (index === -1) req.user[field].push(id);
