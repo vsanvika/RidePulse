@@ -1,8 +1,13 @@
 import axios from "axios";
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL ||
-  (import.meta.env.PROD ? "https://ridepulse-703c.onrender.com/api" : "/api");
+const configuredApiUrl = import.meta.env.VITE_API_URL?.replace(/\/+$/, "");
+const API_BASE_URL = configuredApiUrl
+  ? configuredApiUrl.endsWith("/api")
+    ? configuredApiUrl
+    : `${configuredApiUrl}/api`
+  : import.meta.env.PROD
+    ? "https://ridepulse-703c.onrender.com/api"
+    : "/api";
 
 const api = axios.create({
   baseURL: API_BASE_URL,
